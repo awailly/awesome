@@ -15,8 +15,8 @@ require("awful")
 require("awful.rules")
 require("awful.autofocus")
 -- User libraries
--- require("vicious")
-local vicious = require("vicious")
+require("vicious")
+require("vicious.contrib")
 require("scratch")
 -- Theme handling library
 require("beautiful")
@@ -37,7 +37,7 @@ local sexec  = awful.util.spawn_with_shell
 beautiful.init(home .. "/.config/awesome/zenburn.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm -fg white -bg black"
+terminal = "xterm -fg white -bg black -sl 32000"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -100,7 +100,8 @@ baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
 batwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
+-- vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
+vicious.register(batwidget, vicious.contrib.batproc, "$1$2%", 61, "BAT0")
 -- }}}
 
 -- {{{ Memory usage
