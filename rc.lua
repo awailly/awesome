@@ -37,6 +37,8 @@ local sexec  = awful.util.spawn_with_shell
 beautiful.init(home .. "/.config/awesome/zenburn.lua")
 
 -- This is used later as the default terminal and editor to run.
+-- A.Tabou: Increase default font size for all terminals
+-- terminal = "xterm -fg white -bg black -fn -*-fixed-medium-*-*-*-14-*
 terminal = "xterm -fg white -bg black -sl 32000"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
