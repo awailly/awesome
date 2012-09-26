@@ -15,8 +15,8 @@ require("awful")
 require("awful.rules")
 require("awful.autofocus")
 -- User libraries
-require("vicious")
-require("vicious.contrib")
+vicious = require("vicious")
+vicious.contrib = require("vicious.contrib")
 require("scratch")
 -- Theme handling library
 require("beautiful")
