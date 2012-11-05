@@ -102,8 +102,8 @@ baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
 batwidget = widget({ type = "textbox" })
 -- Register widget
--- vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
-vicious.register(batwidget, vicious.contrib.batproc, "$1$2%", 61, "BAT0")
+vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
+-- vicious.register(batwidget, vicious.contrib.batproc, "$1$2%", 61, "BAT0")
 -- }}}
 
 -- {{{ Memory usage
