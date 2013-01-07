@@ -1,7 +1,7 @@
 -- {{{ License
 --
--- Awesome configuration, using awesome 3.4.8 on Arch GNU/Linux
---   * Adrian C. <anrxc@sysphere.org>
+-- Awesome configuration, using awesome 3.5 on Arch GNU/Linux
+--   * Inspired by Adrian C. <anrxc@sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
 
@@ -17,11 +17,8 @@ awful.autofocus = require("awful.autofocus")
 -- User libraries
 vicious = require("vicious")
 vicious.contrib = require("vicious.contrib")
-scratch = require("scratch")
 -- Theme handling library
 beautiful = require("beautiful")
--- Notification library
-naughty = require("naughty")
 -- Wibox
 wibox = require("wibox")
 -- }}}
@@ -59,15 +56,15 @@ layouts = {
 
 -- {{{ Tags
 tags = {
-  names  = { "term", "dev", "web", "mail", "im", 6, 7, "rss", "media" },
-  layout = { layouts[2], layouts[1], layouts[1], layouts[1], layouts[1],
-             layouts[6], layouts[6], layouts[5], layouts[6]
+  names  = { "term", "dev", "web", "mail", "im", "cloud", 7, "rss", "media" },
+  layout = { layouts[3], layouts[3], layouts[1], layouts[1], layouts[1],
+             layouts[3], layouts[1], layouts[1], layouts[1]
 }}
 
 for s = 1, screen.count() do
     tags[s] = awful.tag(tags.names, s, tags.layout)
     awful.tag.setproperty(tags[s][5], "mwfact", 0.13)
-    awful.tag.setproperty(tags[s][6], "hide",   true)
+    -- awful.tag.setproperty(tags[s][6], "hide",   true)
     awful.tag.setproperty(tags[s][7], "hide",   true)
 end
 -- }}}
@@ -82,6 +79,14 @@ separator = wibox.widget.imagebox()
 separator:set_image(beautiful.widget_sep)
 -- }}}
 
+-- {{{ Define gradient to be used
+local colour1, colour2
+colour1 = beautiful.fg_widget
+colour2 = beautiful.fg_end_widget
+gradient_colour = {type="linear", from={0, 0}, to={0, 10},
+                   stops={{1, colour1}, {0.5, beautiful.fg_center_widget}, {0, colour2}}}
+--- }}}
+
 -- {{{ CPU usage and temperature
 cpuicon = wibox.widget.imagebox()
 cpuicon:set_image(beautiful.widget_cpu)
@@ -91,17 +96,10 @@ tzswidget = wibox.widget.textbox()
 -- Graph properties
 cpugraph:set_width(40):set_height(14)
 cpugraph:set_background_color(beautiful.fg_off_widget)
-local colour1, colour2
-colour1 = beautiful.fg_widget
-colour2 = beautiful.fg_end_widget
-gradient_colour = {type="linear", from={0, 0}, to={0, 10},
-                   stops={{1, colour1}, {0.5, beautiful.fg_center_widget}, {0, colour2}}}
 cpugraph:set_color(gradient_colour)
---cpugraph:set_gradient_angle(0):set_gradient_colors({
---   beautiful.fg_end_widget, beautiful.fg_center_widget, beautiful.fg_widget
---}) -- Register widgets
+-- Register widgets
 vicious.register(cpugraph,  vicious.widgets.cpu,      "$1")
-vicious.register(tzswidget, vicious.widgets.thermal, " $1C", 19, "thermal_zone0")
+vicious.register(tzswidget, vicious.widgets.thermal, " $1C", 19, {"coretemp.0", "core"})
 -- }}}
 
 -- {{{ Battery state
@@ -119,14 +117,12 @@ memicon = wibox.widget.imagebox()
 memicon:set_image(beautiful.widget_mem)
 -- Initialize widget
 membar = awful.widget.progressbar()
--- Pogressbar properties
+-- Progressbar properties
 membar:set_vertical(true):set_ticks(true)
 membar:set_height(12):set_width(8):set_ticks_size(2)
 membar:set_background_color(beautiful.fg_off_widget)
 membar:set_color(gradient_colour)
---membar:set_gradient_colors({ beautiful.fg_widget,
---   beautiful.fg_center_widget, beautiful.fg_end_widget
---}) -- Register widget
+-- Register widget
 vicious.register(membar, vicious.widgets.mem, "$1", 13)
 -- }}}
 
@@ -144,9 +140,6 @@ for _, w in pairs(fs) do
   w:set_height(14):set_width(5):set_ticks_size(2)
   w:set_border_color(beautiful.border_widget)
   w:set_background_color(beautiful.fg_off_widget)
-  --w:set_gradient_colors({ beautiful.fg_widget,
-  --   beautiful.fg_center_widget, beautiful.fg_end_widget
-  --}) -- Register buttons
   w:set_color(gradient_colour)
   --w.widget:buttons(awful.util.table.join(
   --  awful.button({ }, 1, function () exec("rox", false) end)
@@ -156,8 +149,8 @@ vicious.cache(vicious.widgets.fs)
 -- Register widgets
 vicious.register(fs.r, vicious.widgets.fs, "${/ used_p}",            599)
 vicious.register(fs.h, vicious.widgets.fs, "${/home used_p}",        599)
-vicious.register(fs.s, vicious.widgets.fs, "${/mnt/storage used_p}", 599)
-vicious.register(fs.b, vicious.widgets.fs, "${/mnt/backup used_p}",  599)
+vicious.register(fs.s, vicious.widgets.fs, "${/var used_p}", 599)
+vicious.register(fs.b, vicious.widgets.fs, "${/tmp used_p}",  599)
 -- }}}
 
 -- {{{ Network usage
@@ -224,9 +217,6 @@ volbar:set_vertical(true):set_ticks(true)
 volbar:set_height(12):set_width(8):set_ticks_size(2)
 volbar:set_background_color(beautiful.fg_off_widget)
 volbar:set_color(gradient_colour)
---volbar:set_gradient_colors({ beautiful.fg_widget,
---   beautiful.fg_center_widget, beautiful.fg_end_widget
---}) -- Enable caching
 vicious.cache(vicious.widgets.volume)
 -- Register widgets
 vicious.register(volbar,    vicious.widgets.volume,  "$1",  2, "PCM")
@@ -246,7 +236,7 @@ dateicon:set_image(beautiful.widget_date)
 -- Initialize widget
 datewidget = wibox.widget.textbox()
 -- Register widget
-vicious.register(datewidget, vicious.widgets.date, "%R", 61)
+vicious.register(datewidget, vicious.widgets.date, "%R ", 61)
 -- Register buttons
 datewidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () exec("pylendar.py") end)
@@ -329,7 +319,7 @@ for s = 1, screen.count() do
         fsicon, fs.r, fs.h, fs.s, fs.b, separator,
         dnicon, netwidget, upicon, separator,
         volicon, volbar, volwidget, separator,
-        datewidget, dateicon
+        dateicon, datewidget
     }
 
     local right_layout = wibox.layout.fixed.horizontal()
@@ -603,7 +593,7 @@ autorunApps =
 {
     "nitrogen --set-auto .config/awesome/Hire_a_DOG_by_shahjee2.png",
     "autocutsel -selection CLIPBOARD -fork",
-    "autocutsel -selection PRIMARY -fork",
+    "autocutsel -selection PRIMARY -fork"
 }
 
 if autorun then
