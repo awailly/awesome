@@ -57,8 +57,8 @@ layouts = {
 -- {{{ Tags
 tags = {
   names  = { "term", "dev", "web", "mail", "im", "cloud", 7, "rss", "media" },
-  layout = { layouts[3], layouts[3], layouts[1], layouts[1], layouts[1],
-             layouts[3], layouts[1], layouts[1], layouts[1]
+  layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1],
+             layouts[1], layouts[1], layouts[1], layouts[1]
 }}
 
 for s = 1, screen.count() do
