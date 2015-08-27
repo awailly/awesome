@@ -84,7 +84,7 @@ local colour1, colour2
 colour1 = beautiful.fg_widget
 colour2 = beautiful.fg_end_widget
 gradient_colour = {type="linear", from={0, 0}, to={0, 10},
-                   stops={{1, colour1}, {0.5, beautiful.fg_center_widget}, {0, colour2}}}
+    stops={{1, colour1}, {0.5, beautiful.fg_center_widget}, {0, colour2}}}
 --- }}}
 
 -- {{{ CPU usage and temperature
@@ -99,7 +99,7 @@ cpugraph:set_background_color(beautiful.fg_off_widget)
 cpugraph:set_color(gradient_colour)
 -- Register widgets
 vicious.register(cpugraph,  vicious.widgets.cpu,      "$1")
-vicious.register(tzswidget, vicious.widgets.thermal, " $1C", 19, {"coretemp.0", "core"})
+vicious.register(tzswidget, vicious.widgets.thermal, " $1C", 19, {"thermal_zone1", "sys"})
 -- }}}
 
 -- {{{ Battery state
